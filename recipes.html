@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipes - CleanBowl</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">CleanBowl</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">Diseases & Foods</a></li>
+        <li><a href="">Recipes</a></li>
+        <li><a href="add-recipe.html">Add Recipe</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="recipes">
+    <h1>Healthy Recipes</h1>
+
+    <!-- Search Bars -->
+    <div class="search-bar-container">
+      <input type="text" id="recipeSearch" placeholder="Search for Recipes...">
+      <button id="recipeSearchBtn">Search Recipes</button>
+      <input type="text" id="calorieSearch" placeholder="Search by Calories...">
+      <button id="calorieSearchBtn">Search by Calories</button>
+    </div>
+
+    <div id="searchMessage"></div> <!-- Message to show which search the user is making -->
+
+    <div id="recipe-list"></div> <!-- Recipes will be injected here -->
+  </section>
+  
+  <div id="nutrition-info">
+    <!-- Nutrition info will be displayed here -->
+  </div>
+
+  <footer>
+    <p>&copy; 2025 CleanBowl</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

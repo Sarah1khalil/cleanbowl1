@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Your Recipe - CleanBowl</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">CleanBowl</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">Diseases & Foods</a></li>
+        <li><a href="recipes.html">Recipes</a></li>
+        <li><a href="add-recipe.html" class="active">Add Recipe</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Add Recipe Section -->
+  <section class="add-recipe-section">
+    <div class="add-recipe-intro">
+      <h2>Add Your Recipe</h2>
+      <p>Share your favorite healthy recipes with the world! Help others find nutritious meals that suit their health needs.</p>
+    </div>
+
+    <!-- Recipe Form -->
+    <div class="add-recipe-form">
+      <form id="recipe-form">
+        <input type="text" name="recipe-name" id="recipe-name" placeholder="Recipe Name" required>
+        <textarea name="recipe-description" id="recipe-description" placeholder="Recipe Description" required></textarea>
+        <input type="text" name="ingredients" id="ingredients" placeholder="Ingredients (comma separated)" required>
+        <textarea name="instructions" id="instructions" placeholder="Cooking Instructions" required></textarea>
+        <button type="submit">Add Recipe</button>
+      </form>
+    </div>
+     <!-- Saved Recipes Display Section -->
+     <div class="saved-recipes">
+      <h3>Saved Recipes</h3>
+      <div id="recipes-list"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 CleanBowl | All rights reserved</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
