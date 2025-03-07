@@ -44,6 +44,82 @@
     <p>&copy; 2025 CleanBowl</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script > //recipe page 
+    const recipeSearchButton = document.getElementById("recipeSearchBtn");
+    const nutritionSearchButton = document.getElementById("calorieSearchBtn");
+    
+
+    
+    // Recipe Search
+    fetch('https://api.edamam.com/api/recipes/v2?type=public&q=chicken&app_id=7cfd6ac6&app_key=2567c52b071ba71cab42268d0d0e58f5', {
+        method: 'GET',
+        headers: {
+          'Edamam-Account-User': 'sarah1khalil'
+        }
+      })
+        .then(response => response.json())
+        // .then(data => console.log(data))
+        // .catch(error => console.error('Error fetching recipe:', error));
+        .then(data => {
+            if (data.hits) {
+                displayRecipeResults(data.hits); // Assuming 'hits' contains the recipes
+            } else {
+                console.error('No recipes found');
+            }
+        })
+        .catch(error => console.error('Error fetching recipe:', error));
+    
+    // Nutrition Search
+    nutritionSearchButton.addEventListener('click', () => {
+      const query = document.getElementById("calorieSearch").value;
+      fetch(`https://api.calorieninjas.com/v1/nutrition?query=${query}`, {
+        method: "GET",
+        headers: {
+          "X-Api-Key": "lQr2EdvDcnH+O3JATJysg==tW07VueuFsAIREtY"
+        }
+      })
+      
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          displayNutritionResults(data); // Display nutrition info
+        })
+        .catch(error => console.error('Error fetching nutrition info:', error));
+    });
+    
+    // Function to display recipe results
+    function displayRecipeResults(recipes) {
+      const resultsDiv = document.getElementById('recipe-list');
+      resultsDiv.innerHTML = ''; // Clear previous results
+      recipes.forEach(recipe => {
+        const recipeCard = document.createElement('div');
+        recipeCard.classList.add('recipe-card');
+        recipeCard.innerHTML = `
+          <h3>${recipe.title}</h3>
+          <img src="${recipe.image}" alt="${recipe.title}" />
+          <p>Ready in ${recipe.readyInMinutes} minutes</p>
+          <a href="https://spoonacular.com/recipes/${recipe.id}" target="_blank">View Recipe</a>
+        `;
+        resultsDiv.appendChild(recipeCard);
+      });
+    }
+    
+    // Function to display nutrition results
+    function displayNutritionResults(ingredients) {
+      const resultsDiv = document.getElementById('nutrition-info');
+      resultsDiv.innerHTML = ''; // Clear previous results
+      ingredients.forEach(item => {
+        const nutritionCard = document.createElement('div');
+        nutritionCard.classList.add('nutrition-card');
+        nutritionCard.innerHTML = `
+          <h3>${item.name}</h3>
+          <p>Calories: ${item.nutrition.calories} kcal</p>
+          <p>Protein: ${item.nutrition.protein} g</p>
+          <p>Carbs: ${item.nutrition.carbs} g</p>
+          <p>Fat: ${item.nutrition.fat} g</p>
+        `;
+        resultsDiv.appendChild(nutritionCard);
+      });
+    }</script>
 </body>
 </html>

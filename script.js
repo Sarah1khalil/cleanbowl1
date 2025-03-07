@@ -119,9 +119,16 @@ fetch('https://api.edamam.com/api/recipes/v2?type=public&q=chicken&app_id=7cfd6a
     }
   })
     .then(response => response.json())
-    .then(data => console.log(data))
+    // .then(data => console.log(data))
+    // .catch(error => console.error('Error fetching recipe:', error));
+    .then(data => {
+        if (data.hits) {
+            displayRecipeResults(data.hits); // Assuming 'hits' contains the recipes
+        } else {
+            console.error('No recipes found');
+        }
+    })
     .catch(error => console.error('Error fetching recipe:', error));
-  
 
 // Nutrition Search
 nutritionSearchButton.addEventListener('click', () => {
