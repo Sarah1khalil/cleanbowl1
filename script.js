@@ -1,3 +1,21 @@
+//to toggle the menu 
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.querySelector('.hamburger');
+    const nav = document.querySelector('nav');
+
+    hamburger.addEventListener('click', function() {
+        nav.classList.toggle('active');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!nav.contains(event.target) && !hamburger.contains(event.target)) {
+            nav.classList.remove('active');
+        }
+    });
+});
+
+  
 // Load saved recipes from localStorage when the page loads
 document.addEventListener('DOMContentLoaded', function () {
     loadSavedRecipes();
@@ -105,83 +123,63 @@ recipeForm.addEventListener('submit', function (event) {
 });
 
 //recipe page 
-const recipeSearchButton = document.getElementById("recipeSearchBtn");
-const nutritionSearchButton = document.getElementById("calorieSearchBtn");
 
-// Spoonacular API key (replace with your actual API key)
-const API_KEY = 'YOUR_API_KEY';
-
-// Recipe Search
-fetch('https://api.edamam.com/api/recipes/v2?type=public&q=chicken&app_id=7cfd6ac6&app_key=2567c52b071ba71cab42268d0d0e58f5', {
-    method: 'GET',
-    headers: {
-      'Edamam-Account-User': 'sarah1khalil'
+// Your Edamam API credentials
+    const APP_ID = '7cfd6ac6'; // Replace with your actual App ID
+    const APP_KEY = '2567c52b071ba71cab42268d0d0e58f5'; // Replace with your actual App Key
+    
+    // Function to fetch recipes based on the search query
+    function fetchRecipes(query) {
+        const url = `https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}`;
+    
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.hits.length === 0) {
+                    document.getElementById('searchMessage').innerText = 'No recipes found.';
+                } else {
+                    displayRecipes(data.hits);
+                    document.getElementById('searchMessage').innerText = ''; // Clear previous messages
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching recipes:', error);
+                document.getElementById('searchMessage').innerText = 'Error fetching recipes. Please try again.';
+            });
     }
-  })
-    .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error fetching recipe:', error));
-    .then(data => {
-        if (data.hits) {
-            displayRecipeResults(data.hits); // Assuming 'hits' contains the recipes
+    
+    // Function to display the fetched recipes
+    function displayRecipes(recipes) {
+        const resultsDiv = document.getElementById('recipe-list');
+        resultsDiv.innerHTML = ''; // Clear previous results
+    
+        recipes.forEach(recipe => {
+            const recipeCard = `
+                <div class="recipe-card">
+                    <h3>${recipe.recipe.label}</h3>
+                    <img src="${recipe.recipe.image}" alt="${recipe.recipe.label}" />
+                    <p><a href="${recipe.recipe.url}" target="_blank">View Recipe</a></p>
+                    <p>Ingredients: ${recipe.recipe.ingredientLines.join(', ')}</p>
+                </div>
+            `;
+            resultsDiv.innerHTML += recipeCard; // Add each recipe to the results div
+        });
+    }
+    
+    // Event listener for the search button (for recipes)
+    document.getElementById('recipeSearchBtn').addEventListener('click', () => {
+        const query = document.getElementById('recipeSearch').value.trim();
+        if (query) {
+            fetchRecipes(query); // Fetch recipes based on user input
         } else {
-            console.error('No recipes found');
+            document.getElementById('searchMessage').innerText = 'Please enter a recipe name.';
         }
     })
-    .catch(error => console.error('Error fetching recipe:', error));
-
-// Nutrition Search
-nutritionSearchButton.addEventListener('click', () => {
-  const query = document.getElementById("calorieSearch").value;
-  fetch(`https://api.calorieninjas.com/v1/nutrition?query=${query}`, {
-    method: "GET",
-    headers: {
-      "X-Api-Key": "lQr2EdvDcnH+O3JATJysg==tW07VueuFsAIREtY"
-    }
-  })
-  
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      displayNutritionResults(data); // Display nutrition info
-    })
-    .catch(error => console.error('Error fetching nutrition info:', error));
-});
-
-// Function to display recipe results
-function displayRecipeResults(recipes) {
-  const resultsDiv = document.getElementById('recipe-list');
-  resultsDiv.innerHTML = ''; // Clear previous results
-  recipes.forEach(recipe => {
-    const recipeCard = document.createElement('div');
-    recipeCard.classList.add('recipe-card');
-    recipeCard.innerHTML = `
-      <h3>${recipe.title}</h3>
-      <img src="${recipe.image}" alt="${recipe.title}" />
-      <p>Ready in ${recipe.readyInMinutes} minutes</p>
-      <a href="https://spoonacular.com/recipes/${recipe.id}" target="_blank">View Recipe</a>
-    `;
-    resultsDiv.appendChild(recipeCard);
-  });
-}
-
-// Function to display nutrition results
-function displayNutritionResults(ingredients) {
-  const resultsDiv = document.getElementById('nutrition-info');
-  resultsDiv.innerHTML = ''; // Clear previous results
-  ingredients.forEach(item => {
-    const nutritionCard = document.createElement('div');
-    nutritionCard.classList.add('nutrition-card');
-    nutritionCard.innerHTML = `
-      <h3>${item.name}</h3>
-      <p>Calories: ${item.nutrition.calories} kcal</p>
-      <p>Protein: ${item.nutrition.protein} g</p>
-      <p>Carbs: ${item.nutrition.carbs} g</p>
-      <p>Fat: ${item.nutrition.fat} g</p>
-    `;
-    resultsDiv.appendChild(nutritionCard);
-  });
-}
 
 
   
